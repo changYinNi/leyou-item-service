@@ -1,0 +1,29 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: leyou-item-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.104:3306/heima?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowMultiQueries=true
+    username: root
+    password: 123456
+  rabbitmq:
+    host: 192.168.1.104
+    virtual-host: /leyou
+    username: leyou
+    password: leyou
+    template:
+      exchange: leyou.item.exchange  #配置默认的交换机,不需要在程序中指定交换机
+mybatis:
+  type-aliases-package: com.leyou.pojo
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 5 #心跳时间
+    lease-expiration-duration-in-seconds: 15 #过期时间

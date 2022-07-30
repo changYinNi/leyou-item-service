@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leyou.mapper.SkuMapper">
+
+    <insert id="addSku" parameterType="com.leyou.pojo.Sku" useGeneratedKeys="true" keyProperty="sku.id">
+        insert into tb_sku(id,spu_id,title,images,price,indexes,own_spec,enable,create_time,last_update_time)
+        values(#{sku.id},#{sku.spuId},#{sku.title},#{sku.images},#{sku.price},#{sku.indexes},#{sku.ownSpec},
+               #{sku.enable},#{sku.createTime},#{sku.lastUpdateTime})
+    </insert>
+
+    <select id="querySkusBySpuId" resultType="com.leyou.pojo.Sku">
+        select id,spu_id spuId,title,images,price,indexes,own_spec ownSpec,enable,create_time createTime,last_update_time lastUpdateTime,stock
+        from tb_sku sku INNER JOIN tb_stock stock ON sku.id = stock.sku_id where sku.spu_id = #{spuId}
+    </select>
+
+    <delete id="deleteSkus" parameterType="java.lang.Long">
+        delete from tb_sku where spu_id = #{spuId}
+    </delete>
+
+    <select id="querySkuById" resultType="com.leyou.pojo.Sku">
+        select id,spu_id,title,images,price,indexes,own_spec ownSpec,enable,create_time createTime,last_update_time lastUpdateTime from tb_sku where id = #{skuId}
+    </select>
+
+    <select id="querySkuBySkuIds" resultType="com.leyou.pojo.Sku">
+        select id,spu_id,title,images,price,indexes,own_spec ownSpec,enable,create_time createTime,last_update_time lastUpdateTime from tb_sku where id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

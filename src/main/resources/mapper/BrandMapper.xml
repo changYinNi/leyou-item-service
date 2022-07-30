@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leyou.mapper.BrandMapper">
+
+    <select id="searchBrands" resultType="com.leyou.pojo.Brand">
+        select * from tb_brand
+        <where>
+            <choose>
+                <when test="name != null and name != ''">
+                    and name like concat('%', #{name}, '%')
+                </when>
+                <when test="letter != null and letter != ''">
+                    and letter = #{letter}
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <insert id="insertBrand" parameterType="com.leyou.pojo.Brand" useGeneratedKeys="true" keyProperty="brand.id">
+        insert into tb_brand(name,image,letter)values(#{brand.name},#{brand.image},#{brand.letter})
+    </insert>
+
+    <insert id="insertBrandCategory">
+        insert into tb_category_brand(category_id,brand_id)values(#{cid},#{bid})
+    </insert>
+
+    <select id="queryBrandsByCid" resultType="com.leyou.pojo.Brand">
+        select brand.id id,brand.`name` `name`,brand.letter letter from tb_brand brand
+        INNER JOIN tb_category_brand tcb ON brand.id = tcb.brand_id where tcb.category_id = #{cid};
+    </select>
+
+    <select id="getBrand" resultType="com.leyou.pojo.Brand">
+        select id,`name`,image,letter from tb_brand where id = #{id}
+    </select>
+
+</mapper>

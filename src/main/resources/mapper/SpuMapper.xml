@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leyou.mapper.SpuMapper">
+
+    <select id="searchSpus" resultType="com.leyou.bo.SpuBo">
+        select spu.id id,spu.title title,spu.sub_title subTitle,spu.cid1 cid1,spu.cid2 cid2,spu.cid3 cid3,spu.brand_id brandId,
+        spu.saleable saleable,spu.valid valid,spu.create_time createTime,spu.last_update_time lastUpdateTime,
+        c1.id,c1.`name`,c2.id,c2.`name`,c3.id,c3.`name`, CONCAT(c1.`name`,'/',c2.`name`,'/',c3.`name`) cname,
+        brand.id bid,brand.`name` bname from tb_spu spu
+            INNER JOIN tb_category c1 ON spu.cid1 = c1.id
+            INNER JOIN tb_category c2 ON spu.cid2 = c2.id
+            INNER JOIN tb_category c3 ON spu.cid3 = c3.id
+            INNER JOIN tb_brand brand ON spu.brand_id = brand.id
+             <where>
+                 <choose>
+                     <when test="title != null and title != ''">
+                         and title like concat('%',#{title},'%')
+                     </when>
+                     <when test="saleable != null">
+                         and saleable = #{saleable}
+                     </when>
+                 </choose>
+             </where>
+        order by create_time
+    </select>
+
+    <insert id="addSpu" parameterType="com.leyou.pojo.Spu" useGeneratedKeys="true" keyProperty="spu.id">
+        insert into tb_spu(id,title,sub_title,cid1,cid2,cid3,brand_id,saleable,valid,create_time,last_update_time)
+        values(#{spu.id},#{spu.title},#{spu.subTitle},#{spu.cid1},#{spu.cid2},#{spu.cid3},#{spu.brandId},
+               #{spu.saleable},#{spu.valid},#{spu.createTime},#{spu.lastUpdateTime})
+    </insert>
+
+    <update id="modifySpu" parameterType="com.leyou.pojo.Spu">
+        update tb_spu set title = #{spu.title},sub_title = #{spu.subTitle},cid1 = #{spu.cid1},cid2 = #{spu.cid2},cid3 = #{spu.cid3},brand_id = #{spu.brandId},
+            saleable = #{spu.saleable},valid = #{spu.valid},create_time = #{spu.createTime},last_update_time = #{spu.lastUpdateTime} where id = #{spu.id}
+    </update>
+
+    <select id="querySpuById" resultType="com.leyou.pojo.Spu">
+        select spu.id id,spu.title title,spu.sub_title subTitle,spu.cid1 cid1,spu.cid2 cid2,spu.cid3 cid3,spu.brand_id brandId,
+        spu.saleable saleable,spu.valid valid,spu.create_time createTime,spu.last_update_time lastUpdateTime from tb_spu spu where spu.id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leyou.mapper.SpecParamMapper">
+    
+    <select id="querySpecParams" resultType="com.leyou.pojo.SpecParam">
+        select id,cid,group_id,`name`,`numeric`,unit,generic,searching,segments from tb_spec_param sp
+        <where>
+            <if test="gid != null and gid != ''">
+                and sp.group_id = #{gid}
+            </if>
+            <if test="cid != null and cid != ''">
+                and sp.cid = #{cid}
+            </if>
+            <if test="generic != null">
+                and sp.generic = #{generic}
+            </if>
+            <if test="searching == true">
+                and sp.searching = #{searching}
+            </if>
+<!--            <choose>-->
+<!--                <when test="gid != null and gid != ''">-->
+<!--                    and sp.group_id = #{gid}-->
+<!--                </when>-->
+<!--                <when test="cid != null and cid != ''">-->
+<!--                    and sp.cid = #{cid}-->
+<!--                </when>-->
+<!--                <when test="generic == true">-->
+<!--                    and sp.generic = #{generic}-->
+<!--                </when>-->
+<!--                <when test="searching == true">-->
+<!--                    and sp.searching = #{searching}-->
+<!--                </when>-->
+<!--            </choose>-->
+        </where>
+    </select>
+    
+</mapper>
